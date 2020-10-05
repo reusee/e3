@@ -8,7 +8,7 @@ import (
 
 type Stacktrace struct {
 	Frames []Frame
-	Prev   error
+	Prev
 }
 
 type Frame struct {
@@ -31,7 +31,7 @@ func (s Stacktrace) Error() string {
 		}
 		b.WriteString(fmt.Sprintf("%s:%d %s", frame.File, frame.Line, frame.Function))
 	}
-	if s.Prev != nil {
+	if s.Prev.error != nil {
 		b.WriteString("\n")
 		b.WriteString(s.Prev.Error())
 	}
@@ -40,7 +40,7 @@ func (s Stacktrace) Error() string {
 
 func NewStacktrace(prev error) error {
 	stacktrace := Stacktrace{
-		Prev: prev,
+		Prev: Prev{prev},
 	}
 	numPCs := 32
 	for {
