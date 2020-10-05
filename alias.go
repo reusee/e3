@@ -11,5 +11,6 @@ type (
 
 var (
 	is = errors.Is
+	as = errors.As
 	pt = fmt.Printf
 )
