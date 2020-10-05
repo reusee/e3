@@ -34,10 +34,8 @@ func (s Stacktrace) Error() string {
 	return b.String()
 }
 
-func NewStacktrace(prev error) error {
-	stacktrace := Stacktrace{
-		Prev: Prev{prev},
-	}
+func NewStacktrace() *Stacktrace {
+	stacktrace := &Stacktrace{}
 	numPCs := 32
 	for {
 		pcs := make([]uintptr, numPCs)
@@ -67,10 +65,4 @@ func NewStacktrace(prev error) error {
 		break
 	}
 	return stacktrace
-}
-
-func (n Make) WithStacktrace() Make {
-	return func(prev error, args ...any) error {
-		return NewStacktrace(n(prev, args...))
-	}
 }

@@ -7,11 +7,9 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-	ce, he := New(Default)
-
 	err := func() (err error) {
-		defer he(&err)
-		ce(io.EOF)
+		defer Catch(&err)
+		Check(io.EOF)
 		return
 	}()
 	if !is(err, io.EOF) {
@@ -19,8 +17,8 @@ func TestCheck(t *testing.T) {
 	}
 
 	err = func() (err error) {
-		defer he(&err)
-		ce(io.EOF, "foo %s", "bar")
+		defer Catch(&err)
+		Check(io.EOF, NewInfo("foo %s", "bar"))
 		return
 	}()
 	if !is(err, io.EOF) {
@@ -38,8 +36,8 @@ func TestCheck(t *testing.T) {
 	}
 
 	err = func() (err error) {
-		defer he(&err, "foo %s", "bar")
-		ce(io.EOF)
+		defer Catch(&err, NewInfo("foo %s", "bar"))
+		Check(io.EOF)
 		return
 	}()
 	if !is(err, io.EOF) {
@@ -68,8 +66,8 @@ func TestCheck(t *testing.T) {
 			}
 		}()
 		func() (err error) {
-			defer he(nil)
-			ce(io.EOF)
+			defer Catch(nil)
+			Check(io.EOF)
 			return
 		}()
 	}()
@@ -82,9 +80,28 @@ func TestCheck(t *testing.T) {
 			}
 		}()
 		func() (err error) {
-			defer he(&err)
+			defer Catch(&err)
 			panic(42)
 		}()
 	}()
+
+	err = func() (err error) {
+		defer Catch(&err, NewInfo("foo %s", "bar"))
+		return io.EOF
+	}()
+	if err.Error() != "foo bar\nEOF" {
+		t.Fatal()
+	}
+	if !is(err, io.EOF) {
+		t.Fatal()
+	}
+
+	err = func() (err error) {
+		defer Catch(&err, NewInfo("foo %s", "bar"))
+		return nil
+	}()
+	if err != nil {
+		t.Fatal()
+	}
 
 }

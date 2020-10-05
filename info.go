@@ -20,9 +20,8 @@ func (i Info) Error() string {
 	return b.String()
 }
 
-func NewInfo(prev error, args ...any) error {
-	return Info{
-		Info: fmt.Sprintf(args[0].(string), args[1:]...),
-		Prev: Prev{prev},
+func NewInfo(format string, args ...any) *Info {
+	return &Info{
+		Info: fmt.Sprintf(format, args...),
 	}
 }
