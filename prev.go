@@ -1,13 +1,13 @@
 package e3
 
 type Prev struct {
-	error
+	Err error
 }
 
 func (p Prev) Unwrap() error {
-	return p.error
+	return p.Err
 }
 
 func (p *Prev) Wrap(err error) {
-	p.error = err
+	p.Err = err
 }

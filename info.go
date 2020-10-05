@@ -13,9 +13,9 @@ type Info struct {
 func (i Info) Error() string {
 	var b strings.Builder
 	b.WriteString(i.Info)
-	if i.Prev.error != nil {
+	if i.Prev.Err != nil {
 		b.WriteString("\n")
-		b.WriteString(i.Prev.Error())
+		b.WriteString(i.Prev.Err.Error())
 	}
 	return b.String()
 }

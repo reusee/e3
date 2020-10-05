@@ -17,10 +17,6 @@ type Frame struct {
 	Function string
 }
 
-func (s Stacktrace) Unwrap() error {
-	return s.Prev
-}
-
 func (s Stacktrace) Error() string {
 	var b strings.Builder
 	for i, frame := range s.Frames {
@@ -31,9 +27,9 @@ func (s Stacktrace) Error() string {
 		}
 		b.WriteString(fmt.Sprintf("%s:%d %s", frame.File, frame.Line, frame.Function))
 	}
-	if s.Prev.error != nil {
+	if s.Prev.Err != nil {
 		b.WriteString("\n")
-		b.WriteString(s.Prev.Error())
+		b.WriteString(s.Prev.Err.Error())
 	}
 	return b.String()
 }
