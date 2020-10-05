@@ -27,10 +27,7 @@ func (s Stacktrace) Error() string {
 		}
 		b.WriteString(fmt.Sprintf("%s:%d %s", frame.File, frame.Line, frame.Function))
 	}
-	if s.Prev.Err != nil {
-		b.WriteString("\n")
-		b.WriteString(s.Prev.Err.Error())
-	}
+	b.WriteString(s.Prev.String("\n"))
 	return b.String()
 }
 

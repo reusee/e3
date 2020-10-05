@@ -13,10 +13,7 @@ type Info struct {
 func (i Info) Error() string {
 	var b strings.Builder
 	b.WriteString(i.Info)
-	if i.Prev.Err != nil {
-		b.WriteString("\n")
-		b.WriteString(i.Prev.Err.Error())
-	}
+	b.WriteString(i.Prev.String("\n"))
 	return b.String()
 }
 

@@ -11,3 +11,10 @@ func (p Prev) Unwrap() error {
 func (p *Prev) Wrap(err error) {
 	p.Err = err
 }
+
+func (p Prev) String(prefix string) string {
+	if p.Err == nil {
+		return ""
+	}
+	return prefix + p.Err.Error()
+}
