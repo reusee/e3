@@ -10,7 +10,7 @@ func TestWrap(t *testing.T) {
 	if !is(err, io.EOF) {
 		t.Fatal()
 	}
-	if info := (Info{}); !as(err, &info) {
+	if info := new(Info); !as(err, &info) {
 		t.Fatal()
 	} else if info.Info != "foo" {
 		t.Fatal()

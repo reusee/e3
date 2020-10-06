@@ -17,7 +17,7 @@ type Frame struct {
 	Function string
 }
 
-func (s Stacktrace) Error() string {
+func (s *Stacktrace) Error() string {
 	var b strings.Builder
 	for i, frame := range s.Frames {
 		if i == 0 {

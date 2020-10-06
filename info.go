@@ -10,7 +10,7 @@ type Info struct {
 	Prev
 }
 
-func (i Info) Error() string {
+func (i *Info) Error() string {
 	var b strings.Builder
 	b.WriteString(i.Info)
 	b.WriteString(i.Prev.String("\n"))

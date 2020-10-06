@@ -14,7 +14,7 @@ func Check(err error, wrappers ...Wrapper) {
 		if len(wrappers) > 0 {
 			err = Wrap(err, wrappers...)
 		}
-		if _, ok := err.(Stacktrace); !ok {
+		if _, ok := err.(*Stacktrace); !ok {
 			err = Wrap(err, NewStacktrace())
 		}
 		panic(&thrownError{

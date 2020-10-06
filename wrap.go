@@ -17,8 +17,5 @@ func Wrap(
 		err = wrapper
 	}
 	v := reflect.ValueOf(err)
-	for v.Kind() == reflect.Ptr {
-		v = v.Elem()
-	}
 	return v.Interface().(error)
 }
