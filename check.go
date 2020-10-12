@@ -9,13 +9,13 @@ func (t *thrownError) String() string { // NOCOVER
 	return t.err.Error()
 }
 
-func Check(err error, wrappers ...Wrapper) {
+func Check(err error, fns ...WrapFunc) {
 	if err != nil {
-		if len(wrappers) > 0 {
-			err = Wrap(err, wrappers...)
+		for _, fn := range fns {
+			err = fn(err)
 		}
 		if _, ok := err.(*Stacktrace); !ok {
-			err = Wrap(err, NewStacktrace())
+			err = NewStacktrace()(err)
 		}
 		panic(&thrownError{
 			err: err,
@@ -23,16 +23,17 @@ func Check(err error, wrappers ...Wrapper) {
 	}
 }
 
-func Catch(errp *error, wrappers ...Wrapper) {
+func Catch(errp *error, fns ...WrapFunc) {
 	if errp == nil {
 		return
 	}
 	if p := recover(); p != nil {
 		if e, ok := p.(*thrownError); ok {
-			if len(wrappers) > 0 {
-				e.err = Wrap(e.err, wrappers...)
+			err := e.err
+			for _, fn := range fns {
+				err = fn(err)
 			}
-			*errp = e.err
+			*errp = err
 		} else {
 			panic(p)
 		}
@@ -41,6 +42,9 @@ func Catch(errp *error, wrappers ...Wrapper) {
 		if err == nil {
 			return
 		}
-		*errp = Wrap(err, wrappers...)
+		for _, fn := range fns {
+			err = fn(err)
+		}
+		*errp = err
 	}
 }

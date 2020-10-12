@@ -17,8 +17,14 @@ func (i *Info) Error() string {
 	return b.String()
 }
 
-func NewInfo(format string, args ...any) *Info {
-	return &Info{
-		Info: fmt.Sprintf(format, args...),
+var _ Error = new(Info)
+
+func NewInfo(format string, args ...any) WrapFunc {
+	return func(err error) Error {
+		info := &Info{
+			Info: fmt.Sprintf(format, args...),
+		}
+		info.Prev.Err = err
+		return info
 	}
 }

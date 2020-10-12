@@ -7,7 +7,7 @@ import (
 )
 
 func TestStacktrace(t *testing.T) {
-	trace := Wrap(io.EOF, NewStacktrace())
+	trace := NewStacktrace()(io.EOF)
 	ok, err := regexp.MatchString(
 		"> at .*stacktrace_test.go:[0-9]+ github.com/reusee/e3.TestStacktrace\n-.*\n-.*\nEOF",
 		trace.Error(),

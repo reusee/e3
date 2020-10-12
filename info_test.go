@@ -6,7 +6,7 @@ import (
 )
 
 func TestInfo(t *testing.T) {
-	info := Wrap(io.EOF, NewInfo("foo %s", "bar"))
+	info := NewInfo("foo %s", "bar")(io.EOF)
 	if info.Error() != "foo bar\nEOF" {
 		t.Fatalf("got %s", info.Error())
 	}

@@ -8,10 +8,6 @@ func (p Prev) Unwrap() error {
 	return p.Err
 }
 
-func (p *Prev) Wrap(err error) {
-	p.Err = err
-}
-
 func (p Prev) String(prefix string) string {
 	if p.Err == nil {
 		return ""

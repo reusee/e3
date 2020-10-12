@@ -31,35 +31,40 @@ func (s *Stacktrace) Error() string {
 	return b.String()
 }
 
-func NewStacktrace() *Stacktrace {
-	stacktrace := &Stacktrace{}
-	numPCs := 32
-	for {
-		pcs := make([]uintptr, numPCs)
-		n := runtime.Callers(1, pcs)
-		if n == len(pcs) { // NOCOVER
-			numPCs *= 2
-			continue
-		}
-		pcs = pcs[:n]
-		frames := runtime.CallersFrames(pcs)
+var _ Error = new(Stacktrace)
+
+func NewStacktrace() WrapFunc {
+	return func(err error) Error {
+		stacktrace := new(Stacktrace)
+		stacktrace.Prev.Err = err
+		numPCs := 32
 		for {
-			frame, more := frames.Next()
-			if strings.HasPrefix(frame.Function, "github.com/reusee/e3.") &&
-				!strings.HasPrefix(frame.Function, "github.com/reusee/e3.Test") {
-				// internal funcs
+			pcs := make([]uintptr, numPCs)
+			n := runtime.Callers(1, pcs)
+			if n == len(pcs) { // NOCOVER
+				numPCs *= 2
 				continue
 			}
-			stacktrace.Frames = append(stacktrace.Frames, Frame{
-				File:     frame.File,
-				Line:     frame.Line,
-				Function: frame.Function,
-			})
-			if !more {
-				break
+			pcs = pcs[:n]
+			frames := runtime.CallersFrames(pcs)
+			for {
+				frame, more := frames.Next()
+				if strings.HasPrefix(frame.Function, "github.com/reusee/e3.") &&
+					!strings.HasPrefix(frame.Function, "github.com/reusee/e3.Test") {
+					// internal funcs
+					continue
+				}
+				stacktrace.Frames = append(stacktrace.Frames, Frame{
+					File:     frame.File,
+					Line:     frame.Line,
+					Function: frame.Function,
+				})
+				if !more {
+					break
+				}
 			}
+			break
 		}
-		break
+		return stacktrace
 	}
-	return stacktrace
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func TestWrap(t *testing.T) {
-	err := Wrap(io.EOF, &Info{Info: "foo"})
+	err := NewInfo("foo")(io.EOF)
 	if !is(err, io.EOF) {
 		t.Fatal()
 	}
