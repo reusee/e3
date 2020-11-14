@@ -18,3 +18,5 @@ func (w WrapFunc) Error() string {
 func (w WrapFunc) Unwrap() error {
 	return w(nil).Unwrap()
 }
+
+var W = Wrap
