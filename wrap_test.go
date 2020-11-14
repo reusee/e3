@@ -15,4 +15,8 @@ func TestWrap(t *testing.T) {
 	} else if info.Info != "foo" {
 		t.Fatal()
 	}
+	err = NewInfo("foo")
+	if err.Error() != "foo" {
+		t.Fatal()
+	}
 }

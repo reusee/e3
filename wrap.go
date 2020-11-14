@@ -9,8 +9,12 @@ func Wrap(err error, fns ...WrapFunc) error {
 	return err
 }
 
-var _ error = WrapFunc(nil)
+var _ Error = WrapFunc(nil)
 
 func (w WrapFunc) Error() string {
 	return w(nil).Error()
+}
+
+func (w WrapFunc) Unwrap() error {
+	return w(nil).Unwrap()
 }
