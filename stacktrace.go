@@ -7,14 +7,14 @@ import (
 )
 
 type Stacktrace struct {
-	Frames []Frame
 	Prev
+	Frames []Frame
 }
 
 type Frame struct {
 	File     string
-	Line     int
 	Function string
+	Line     int
 }
 
 func (s *Stacktrace) Error() string {

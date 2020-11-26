@@ -6,8 +6,8 @@ import (
 )
 
 type Info struct {
-	Info string
 	Prev
+	Info string
 }
 
 func (i *Info) Error() string {
