@@ -57,11 +57,11 @@ func TestCheck(t *testing.T) {
 	func() {
 		defer func() {
 			p := recover()
-			te, ok := p.(*thrownError)
+			te, ok := p.(error)
 			if !ok {
 				t.Fatal()
 			}
-			if !is(te.err, io.EOF) {
+			if !is(te, io.EOF) {
 				t.Fatal()
 			}
 		}()

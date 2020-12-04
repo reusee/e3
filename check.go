@@ -25,9 +25,6 @@ func Check(err error, fns ...WrapFunc) {
 }
 
 func Catch(errp *error, fns ...WrapFunc) {
-	if errp == nil {
-		return
-	}
 	var err error
 	if p := recover(); p != nil {
 		if e, ok := p.(*thrownError); ok {
@@ -36,7 +33,7 @@ func Catch(errp *error, fns ...WrapFunc) {
 			panic(p)
 		}
 	} else {
-		if *errp != nil {
+		if errp != nil && *errp != nil {
 			err = *errp
 		}
 	}
@@ -46,7 +43,11 @@ func Catch(errp *error, fns ...WrapFunc) {
 	for _, fn := range fns {
 		err = fn(err)
 	}
-	*errp = err
+	if errp != nil {
+		*errp = err
+	} else {
+		panic(err)
+	}
 }
 
 var C = Check
